@@ -1,28 +1,9 @@
-//  React hooks
-// import React, {useState} from 'react';
-
-//  Class-based components
 import React, {Component} from 'react';
 import classes from './App.css';
-// import Radium, {StyleRoot} from "radium";
-// import styled from "styled-components";
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
-// style component for the button. Can be used in different files
-// const StyledButton = styled.button`
-//   background-color: ${props => props.alt ? 'red' : 'green'};
-//   color: white;
-//   border: 1px solid blue;
-//   padding: .5rem;
-//   cursor: pointer;
-//   font: inherit;
-//
-//   &:hover {
-//   background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
-//   color: black;
-// `;
 
-// Class-based component with state property
 class App extends Component {
     state = {
         persons: [
@@ -77,12 +58,13 @@ class App extends Component {
                 <div>
                     {/* Dynamically display a list of all the persons */}
                     {this.state.persons.map((person, index) => (
-                        <Person
-                            name={person.name}
-                            age={person.age}
-                            click={this.deletePersonHandler.bind(this, index)}
-                            key={person.id}
-                            change={(event) => this.nameChangeHandler(event, person.id)}/>
+                        <ErrorBoundary key={person.id}>
+                            <Person
+                                name={person.name}
+                                age={person.age}
+                                click={this.deletePersonHandler.bind(this, index)}
+                                change={(event) => this.nameChangeHandler(event, person.id)}/>
+                        </ErrorBoundary>
                     ))}
                 </div>
             );
@@ -104,7 +86,7 @@ class App extends Component {
                 <p className={assignedClasses.join(' ')}>This is really working!!!</p>
                 <button className={btnClass.join(' ')}
                     //alt={this.state.showPersons}
-                    onClick={this.togglePersonsHandler}>
+                        onClick={this.togglePersonsHandler}>
                     Switch Name
                 </button>
                 {persons}
@@ -114,48 +96,4 @@ class App extends Component {
 }
 
 export default App;
-
-//  with Radium package
-// export default Radium(App);
-
-// //  Functional component with React hooks
-// const app = props => {
-//     const [personsState, setPersonsState] = useState({
-//             persons: [
-//                 {name: 'Steve', age: 36},
-//                 {name: 'Ioulitta', age: 34},
-//                 {name: 'Evelin', age: 2}
-//             ],
-//             otherState: 'Does not change with setState'
-//         });
-//
-//     //  Using another useState so we can have the otherState alone
-//     const [otherState, setOtherState] = useState('oes not change with setState');
-//
-//     console.log(personsState, otherState)
-//
-//     const togglePersonsHandler = () => {
-//         setPersonsState({
-//             persons: [
-//                 {name: 'Stavros', age: 36},
-//                 {name: 'Ioulitta', age: 34},
-//                 {name: 'Evelin', age: 2.6}
-//             ]
-//         })
-//     }
-//
-//     return (
-//         <div className="App">
-//             <h1>Hi, I'm a React App</h1>
-//             <p>This is really working!!!</p>
-//             <button onClick={togglePersonsHandler}>Switch Name</button>
-//             <Person name={personsState.persons[0].name} age={personsState.persons[0].age}/>
-//             <Person name={personsState.persons[1].name} age={personsState.persons[1].age}>
-//                 My hobbies: Fishing
-//             </Person>
-//             <Person name={personsState.persons[2].name} age={personsState.persons[2].age}/>
-//         </div>
-//     );
-// }
-// export default app;
 
