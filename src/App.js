@@ -4,7 +4,23 @@
 //  Class-based components
 import React, {Component} from 'react';
 import './App.css';
+// import Radium, {StyleRoot} from "radium";
+// import styled from "styled-components";
 import Person from './Person/Person';
+
+// style component for the button. Can be used in different files
+// const StyledButton = styled.button`
+//   background-color: ${props => props.alt ? 'red' : 'green'};
+//   color: white;
+//   border: 1px solid blue;
+//   padding: .5rem;
+//   cursor: pointer;
+//   font: inherit;
+//
+//   &:hover {
+//   background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+//   color: black;
+// `;
 
 // Class-based component with state property
 class App extends Component {
@@ -30,7 +46,7 @@ class App extends Component {
         // getting the array index of the obj id value
         const personIndex = this.state.persons.findIndex(p => p.id === personId);
         //  copying the object to manipulate it
-        const person = { ...this.state.persons[personIndex]};
+        const person = {...this.state.persons[personIndex]};
         person.name = event.target.value;
         //  getting a copy of the persons array
         const persons = [...this.state.persons];
@@ -51,16 +67,23 @@ class App extends Component {
     render() {
         //  inline style for the button
         const style = {
-            backgroundColor: 'white',
+            backgroundColor: 'green',
+            color: 'white',
             border: '1px solid blue',
             padding: '.5rem',
             cursor: 'pointer',
-            font: 'inherit'
+            font: 'inherit',
+            ':hover': {
+                backgroundColor: 'lightgreen',
+                color: 'black'
+            }
         }
 
         //  Toggling persons list based on button click
-        const persons = this.state.showPersons ?
-            (
+        let persons = null;
+
+        if (this.state.showPersons) {
+            persons = (
                 <div>
                     {/* Dynamically display a list of all the persons */}
                     {this.state.persons.map((person, index) => (
@@ -72,14 +95,29 @@ class App extends Component {
                             change={(event) => this.nameChangeHandler(event, person.id)}/>
                     ))}
                 </div>
-            ) : null;
+            );
 
+            //  Changing the style of the button when the list is visible
+            style.backgroundColor = 'red';
+            style[':hover'] = {
+                backgroundColor: 'salmon',
+                color: 'black'
+            }
+        }
+
+        //  Dynamically adjusting 1rst paragraph classes
+        const classes = [];
+
+        if (this.state.persons.length <= 2) classes.push('red');
+        if (this.state.persons.length <= 1) classes.push('bold');
+
+        //  return of the jsx logic constructed
         return (
             <div className="App">
                 <h1>Hi, I'm a React App</h1>
-                <p>This is really working!!!</p>
+                <p className={classes.join(' ')}>This is really working!!!</p>
                 <button
-                    style={style}
+                    //alt={this.state.showPersons}
                     onClick={this.togglePersonsHandler}>
                     Switch Name
                 </button>
@@ -90,6 +128,9 @@ class App extends Component {
 }
 
 export default App;
+
+//  with Radium package
+// export default Radium(App);
 
 // //  Functional component with React hooks
 // const app = props => {
