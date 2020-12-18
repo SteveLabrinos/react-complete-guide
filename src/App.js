@@ -3,7 +3,7 @@
 
 //  Class-based components
 import React, {Component} from 'react';
-import './App.css';
+import classes from './App.css';
 // import Radium, {StyleRoot} from "radium";
 // import styled from "styled-components";
 import Person from './Person/Person';
@@ -65,22 +65,12 @@ class App extends Component {
     }
 
     render() {
-        //  inline style for the button
-        const style = {
-            backgroundColor: 'green',
-            color: 'white',
-            border: '1px solid blue',
-            padding: '.5rem',
-            cursor: 'pointer',
-            font: 'inherit',
-            ':hover': {
-                backgroundColor: 'lightgreen',
-                color: 'black'
-            }
-        }
 
         //  Toggling persons list based on button click
         let persons = null;
+
+        //  inline style for the button using CSS modules classes
+        let btnClass = [classes.Button];
 
         if (this.state.showPersons) {
             persons = (
@@ -97,26 +87,22 @@ class App extends Component {
                 </div>
             );
 
-            //  Changing the style of the button when the list is visible
-            style.backgroundColor = 'red';
-            style[':hover'] = {
-                backgroundColor: 'salmon',
-                color: 'black'
-            }
+            btnClass.push(classes.Red);
+
         }
 
         //  Dynamically adjusting 1rst paragraph classes
-        const classes = [];
+        const assignedClasses = [];
 
-        if (this.state.persons.length <= 2) classes.push('red');
-        if (this.state.persons.length <= 1) classes.push('bold');
+        if (this.state.persons.length <= 2) assignedClasses.push(classes.red);
+        if (this.state.persons.length <= 1) assignedClasses.push(classes.bold);
 
         //  return of the jsx logic constructed
         return (
-            <div className="App">
+            <div className={classes.App}>
                 <h1>Hi, I'm a React App</h1>
-                <p className={classes.join(' ')}>This is really working!!!</p>
-                <button
+                <p className={assignedClasses.join(' ')}>This is really working!!!</p>
+                <button className={btnClass.join(' ')}
                     //alt={this.state.showPersons}
                     onClick={this.togglePersonsHandler}>
                     Switch Name
