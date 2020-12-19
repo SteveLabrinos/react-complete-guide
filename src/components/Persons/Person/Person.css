@@ -5,3 +5,13 @@
     box-shadow: 0 2px 3px #ccc;
     padding: 1rem;
 }
+
+.Person p {
+    cursor: pointer;
+}
+
+@media (min-width: 500px) {
+    .Person {
+        width: 450px;
+    }
+}
