@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 
 class App extends Component {
@@ -47,48 +47,23 @@ class App extends Component {
 
     render() {
 
-        //  Toggling persons list based on button click
-        let persons = null;
-
-        //  inline style for the button using CSS modules classes
-        let btnClass = [classes.Button];
-
-        if (this.state.showPersons) {
-            persons = (
-                <div>
-                    {/* Dynamically display a list of all the persons */}
-                    {this.state.persons.map((person, index) => (
-                        <ErrorBoundary key={person.id}>
-                            <Person
-                                name={person.name}
-                                age={person.age}
-                                click={this.deletePersonHandler.bind(this, index)}
-                                change={(event) => this.nameChangeHandler(event, person.id)}/>
-                        </ErrorBoundary>
-                    ))}
-                </div>
-            );
-
-            btnClass.push(classes.Red);
-
-        }
-
-        //  Dynamically adjusting 1rst paragraph classes
-        const assignedClasses = [];
-
-        if (this.state.persons.length <= 2) assignedClasses.push(classes.red);
-        if (this.state.persons.length <= 1) assignedClasses.push(classes.bold);
+        //  dynamically construct persons list based on the current state
+        const persons = (this.state.showPersons) ?
+            <div>
+                <Persons
+                    persons={this.state.persons}
+                    clicked={this.deletePersonHandler}
+                    changed={this.nameChangeHandler}/>
+            </div> : null
 
         //  return of the jsx logic constructed
         return (
             <div className={classes.App}>
-                <h1>Hi, I'm a React App</h1>
-                <p className={assignedClasses.join(' ')}>This is really working!!!</p>
-                <button className={btnClass.join(' ')}
-                    //alt={this.state.showPersons}
-                        onClick={this.togglePersonsHandler}>
-                    Switch Name
-                </button>
+                <Cockpit
+                    title={this.props.title}
+                    personsLength={this.state.persons.length}
+                    showPersons={this.state.showPersons}
+                    clicked={this.togglePersonsHandler}/>
                 {persons}
             </div>
         );
